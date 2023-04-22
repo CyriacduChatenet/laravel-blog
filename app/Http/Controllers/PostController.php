@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index(): Paginator {
-        return Post::paginate(20);
+    public function index(): View {
+        $posts = Post::paginate(20);
+        return view('blog.index', [
+            'posts' => $posts
+        ]);
     }
 
-    public function show(string $slug, string $id) {
+    public function show(string $slug, string $id): View {
         $post = Post::findOrFail($id);
-        return [
+        return view('blog.show', [
             'post' => $post
-        ];
+        ]);
     }
 
     public function create(string $title, string $slug) {
